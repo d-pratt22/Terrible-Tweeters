@@ -7,12 +7,14 @@ public class Bird : MonoBehaviour
 {
     [SerializeField] float _launchForce = 500;
     [SerializeField] float _maxDragDistance = 5;
+    [SerializeField] float _rotationValue = 5;
 
     Vector2 _startPosition;
     Rigidbody2D _rigidbody2D;
     SpriteRenderer _spriteRenderer;
 
     public bool IsDragging { get; private set; }
+    public object rotation { get; private set; }
 
     void Awake()
     {
@@ -38,9 +40,11 @@ public class Bird : MonoBehaviour
         Vector2 currentPosition = _rigidbody2D.position; 
         Vector2 direction = _startPosition - currentPosition;
         direction.Normalize();
-
+  
         _rigidbody2D.isKinematic = false;
         _rigidbody2D.AddForce(direction * _launchForce);
+
+        _rigidbody2D.AddTorque(_rotationValue);
 
         var audioSource = GetComponent<AudioSource>();
         audioSource.Play();
@@ -87,5 +91,6 @@ public class Bird : MonoBehaviour
         _rigidbody2D.position = _startPosition;
         _rigidbody2D.isKinematic = true;
         _rigidbody2D.velocity = Vector2.zero;
+        _ = _rigidbody2D.freezeRotation;
     }
 }
